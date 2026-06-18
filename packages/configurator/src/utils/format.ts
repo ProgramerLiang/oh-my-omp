@@ -1,4 +1,22 @@
-const CONTROL_BYTES = /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\x80-\x9f]/gu;
+function isControlByte(codePoint: number): boolean {
+	return (
+		codePoint <= 0x08 ||
+		codePoint === 0x0b ||
+		codePoint === 0x0c ||
+		(codePoint >= 0x0e && codePoint <= 0x1f) ||
+		codePoint === 0x7f ||
+		(codePoint >= 0x80 && codePoint <= 0x9f)
+	);
+}
+
+function stripControlBytes(value: string): string {
+	let output = "";
+	for (const char of value) {
+		const codePoint = char.codePointAt(0);
+		if (codePoint !== undefined && !isControlByte(codePoint)) output += char;
+	}
+	return output;
+}
 
 export function normalizeDisplayWidth(width: number): number {
 	if (!Number.isFinite(width)) return 0;
@@ -6,10 +24,11 @@ export function normalizeDisplayWidth(width: number): number {
 }
 
 export function sanitizeDisplayText(value: string): string {
-	return Bun.stripANSI(value)
-		.replaceAll("\t", "   ")
-		.replace(/[\r\n]+/g, " ")
-		.replace(CONTROL_BYTES, "");
+	return stripControlBytes(
+		Bun.stripANSI(value)
+			.replaceAll("\t", "   ")
+			.replace(/[\r\n]+/g, " "),
+	);
 }
 
 export function truncateToWidth(value: string, width: number): string {
