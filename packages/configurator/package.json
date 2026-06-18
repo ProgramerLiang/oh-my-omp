@@ -1,0 +1,70 @@
+{
+	"type": "module",
+	"name": "@oh-my-pi/omp-configurator",
+	"version": "15.13.3",
+	"description": "Standalone TUI configuration dashboard for omp",
+	"homepage": "https://omp.sh",
+	"author": "Can Boluk",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/can1357/oh-my-pi.git",
+		"directory": "packages/configurator"
+	},
+	"bugs": {
+		"url": "https://github.com/can1357/oh-my-pi/issues"
+	},
+	"keywords": [
+		"omp",
+		"configuration",
+		"tui",
+		"terminal",
+		"dashboard"
+	],
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"bin": {
+		"omp-config": "./src/cli.ts"
+	},
+	"scripts": {
+		"check": "biome check . && bun run check:types",
+		"check:types": "tsgo -p tsconfig.json --noEmit",
+		"lint": "biome lint .",
+		"test": "bun test --parallel test/*.test.ts",
+		"fix": "biome check --write --unsafe .",
+		"fmt": "biome format --write ."
+	},
+	"dependencies": {
+		"@oh-my-pi/pi-catalog": "catalog:",
+		"@oh-my-pi/pi-tui": "catalog:",
+		"@oh-my-pi/pi-utils": "catalog:",
+		"chalk": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@types/bun": "catalog:"
+	},
+	"engines": {
+		"bun": ">=1.3.14"
+	},
+	"files": [
+		"src",
+		"README.md",
+		"CHANGELOG.md"
+	],
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts"
+		},
+		"./*": {
+			"types": "./src/*.ts",
+			"import": "./src/*.ts"
+		},
+		"./*.js": "./src/*.ts"
+	},
+	"pi": {
+		"name": "omp-configurator",
+		"description": "TUI configuration dashboard for omp"
+	}
+}
